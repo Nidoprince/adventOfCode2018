@@ -12,7 +12,7 @@ minY = min(coordinates,key=lambda x:x[1])[1]
 grid = []
 
 def findClosestCoordinate(x,y):
-    distances = [abs(x[0])+abs(x[1]) for x in coordinates]
+    distances = [abs(z[0]-x)+abs(z[1]-y) for z in coordinates]
     closest = min(distances)
     if(distances.count(closest) == 1):
         return distances.index(closest)
@@ -27,8 +27,23 @@ def existsOnEdge(value):
             return True
     return False
 
-for x in range(minX,maxX+1):
+for x in range(minX-3,maxX+2):
     gridRow = []
-    for y in range(minY,maxY+1):
+    for y in range(minY-3,maxY+2):
         gridRow.append(findClosestCoordinate(x,y))
     grid.append(gridRow)
+
+counter = {}
+for row in grid:
+    for cell in row:
+        if(cell in counter):
+            counter[cell] += 1
+        else:
+            counter[cell] = 1
+
+mostArea = sorted(counter.items(),reverse = True,key=lambda x:x[1])
+for area in mostArea:
+    if(area[0] != -1 and not existsOnEdge(area[0])):
+        print(area[1])
+        break
+print(mostArea)
